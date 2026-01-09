@@ -14,7 +14,7 @@
         input[type="text"], input[type="number"], input[type="date"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
         .flex-group { display: flex; gap: 10px; margin-bottom: 10px; }
         .flex-group > div { flex: 1; }
-        .flex-group label { width: 120px; flex-shrink: 0; line-height: 38px; } /* 項目名と入力欄を揃える */
+        .flex-group label { width: 120px; flex-shrink: 0; line-height: 38px; }
         .flex-group input { flex: 1; }
         button { width: 100%; padding: 15px; background-color: #66BB6A; color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
         .note { font-size: 12px; color: #666; margin-top: 5px; text-align: center;}
@@ -91,14 +91,15 @@
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script>
     document.getElementById('diagDate').valueAsDate = new Date();
-    liff.init({ liffId: "YOUR_LIFF_ID" }).catch(err => console.error(err));
+    
+    // 修正済み！きょんこのLIFF IDをセットしたよ
+    liff.init({ liffId: "2008861082-o5jaHAfN" }).catch(err => console.error(err));
 
     function sendHealthData() {
         const diagDate = document.getElementById('diagDate').value;
         const petName = document.getElementById('petNameDiag').value;
         const diagnosisName = document.getElementById('diagnosisName').value;
 
-        // 生化学検査
         const ALT = document.getElementById('ALT').value;
         const ALP = document.getElementById('ALP').value;
         const AST = document.getElementById('AST').value;
@@ -114,7 +115,6 @@
         const vLIP = document.getElementById('vLIP').value;
         const CRP = document.getElementById('CRP').value;
 
-        // 血球計算
         const WBC = document.getElementById('WBC').value;
         const RBC = document.getElementById('RBC').value;
         const HCT = document.getElementById('HCT').value;
@@ -135,7 +135,10 @@
         message += `[獣医さんコメント]\n${vetComments || 'なし'}`;
 
         liff.sendMessages([{ type: 'text', text: message }])
-            .then(() => liff.closeWindow())
+            .then(() => {
+                alert("健康診断の結果を送ったよ！");
+                liff.closeWindow();
+            })
             .catch(err => console.error(err));
     }
 </script>
