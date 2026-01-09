@@ -22,11 +22,6 @@
 <div class="container">
     <h2>🐾 CoCo 相談カルテ</h2>
 
-    <div style="background-color: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 25px; border: 1px dashed #ffb74d; text-align: center;">
-        <p style="font-size: 13px; margin: 0 0 10px 0; color: #e65100; font-weight: bold;">📊 血液検査などの結果がある方はこちら</p>
-        <button onclick="goToHealthCheck()" style="padding: 8px 20px; background-color: #ff9800; font-size: 14px; width: auto; margin-top: 0;">健康診断専用フォームへ</button>
-    </div>
-
     <div class="form-group">
         <label for="date">📅 記入日</label>
         <input type="date" id="date">
@@ -93,6 +88,11 @@
         <input type="text" id="environment" placeholder="例：1頭飼い・単身、多頭飼い、留守番時間など">
     </div>
 
+    <div style="background-color: #fff3e0; padding: 15px; border-radius: 10px; margin: 25px 0; border: 1px dashed #ffb74d; text-align: center;">
+        <p style="font-size: 13px; margin: 0 0 10px 0; color: #e65100; font-weight: bold;">📊 血液検査などの結果がある方はこちら</p>
+        <button onclick="goToHealthCheck()" style="padding: 8px 20px; background-color: #ff9800; font-size: 14px; width: auto; margin-top: 0;">健康診断専用フォームへ</button>
+    </div>
+
     <h3>💬 ご相談</h3>
     <div class="form-group">
         <label>📸 写真アップロード</label>
@@ -111,15 +111,13 @@
 <script>
     document.getElementById('date').valueAsDate = new Date();
 
-    // LIFFの初期化（YOUR_LIFF_IDを実際のものに書き換えてね）
-    liff.init({ liffId: "YOUR_LIFF_ID" }).catch(err => console.error(err));
+    // 修正済み！きょんこのLIFF IDをセットしたよ
+    liff.init({ liffId: "2008861082-o5jaHAfN" }).catch(err => console.error(err));
 
-    // 健康診断フォーム（health.html）へジャンプする関数
     function goToHealthCheck() {
         window.location.href = "health.html";
     }
 
-    // データ送信関数
     function sendData() {
         const d = document.getElementById('date').value;
         const owner = document.getElementById('ownerName').value;
@@ -142,7 +140,6 @@
             return;
         }
 
-        // LINEに送るメッセージを組み立て
         const message = `【CoCo相談カルテ ${d}】\n` +
                         `飼い主: ${owner}様\n` +
                         `ワンちゃん: ${name} (${gender})\n` +
@@ -156,11 +153,10 @@
                         `[飼育環境]\n${env || '未記入'}\n\n` +
                         `[相談内容]\n${concern}`;
 
-        // LINEトークに送信
         liff.sendMessages([{ type: 'text', text: message }])
             .then(() => {
                 alert("CoCoに相談を送ったよ！写真はLINEのトークでそのまま送ってね。");
-                liff.closeWindow(); // 送信後に画面を閉じる
+                liff.closeWindow();
             })
             .catch(err => {
                 console.error(err);
