@@ -28,9 +28,19 @@
 
     <div class="form-group"><label>📅 記入日</label><input type="date" id="date"></div>
     <div class="form-group"><label>👤 飼い主さん名</label><input type="text" id="ownerName" required></div>
+    
     <div class="flex-group">
         <div class="form-group" style="flex:2;"><label>🐶 ワンちゃん名</label><input type="text" id="petName" required></div>
         <div class="form-group" style="flex:1;"><label>性別</label><select id="gender"><option>男の子</option><option>女の子</option></select></div>
+    </div>
+
+    <div class="form-group">
+        <label>✂️ 去勢・避妊</label>
+        <select id="neutered">
+            <option value="未去勢・未避妊">未去勢・未避妊</option>
+            <option value="去勢済み">去勢済み</option>
+            <option value="避妊済み">避妊済み</option>
+        </select>
     </div>
 
     <div class="form-group">
@@ -104,12 +114,17 @@
         const owner = document.getElementById('ownerName').value;
         const name = document.getElementById('petName').value;
         const weight = document.getElementById('weight').value;
+        const neutered = document.getElementById('neutered').value; // 去勢避妊
         if (!owner || !name || !weight) { alert("「お名前」と「体重」は必ず入力してね！"); return; }
 
         let ageVal = (ageMode === 'birth') ? document.getElementById('ageResult').innerText : `${document.getElementById('manualAgeYear').value || 0}歳${document.getElementById('manualAgeMonth').value || 0}ヶ月`;
-        const msg = `【相談】名前: ${name}\n年齢: ${ageVal}\n内容: ${document.getElementById('concern').value}`;
+        
+        // メッセージの内容に「去勢・避妊」も入るようにしたよ！
+        const msg = `【相談】\n名前: ${name}\n性別: ${document.getElementById('gender').value}(${neutered})\n年齢: ${ageVal}\n内容: ${document.getElementById('concern').value}`;
+        
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => { alert("送ったよ！"); liff.closeWindow(); });
     }
 </script>
 </body>
 </html>
+
