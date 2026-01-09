@@ -13,8 +13,12 @@
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
         input, select, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
         .flex-group { display: flex; gap: 10px; }
-        button { width: 100%; padding: 15px; background-color: #ffb74d; color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
+        .send-btn { width: 100%; padding: 15px; background-color: #ffb74d; color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
         .note { font-size: 12px; color: #777; margin-top: 5px; }
+        .toggle-btn { background-color: #eee; color: #555; padding: 5px 10px; font-size: 12px; border-radius: 5px; cursor: pointer; margin-bottom: 5px; display: inline-block; border: 1px solid #ddd; }
+        .active-toggle { background-color: #ffb74d; color: white; border-color: #ffb74d; }
+        .age-display { font-size: 14px; color: #e65100; font-weight: bold; margin-top: 5px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -22,143 +26,89 @@
 <div class="container">
     <h2>🐾 CoCo 相談カルテ</h2>
 
-    <div class="form-group">
-        <label for="date">📅 記入日</label>
-        <input type="date" id="date">
-    </div>
-
-    <div class="form-group">
-        <label for="ownerName">👤 飼い主さんのお名前</label>
-        <input type="text" id="ownerName" placeholder="あなたのお名前" required>
-    </div>
-
+    <div class="form-group"><label>📅 記入日</label><input type="date" id="date"></div>
+    <div class="form-group"><label>👤 飼い主さん名</label><input type="text" id="ownerName" required></div>
     <div class="flex-group">
-        <div class="form-group" style="flex:2;">
-            <label for="petName">🐶 ワンちゃん名</label>
-            <input type="text" id="petName" required>
-        </div>
-        <div class="form-group" style="flex:1;">
-            <label>性別</label>
-            <select id="gender"><option value="男の子">男の子</option><option value="女の子">女の子</option></select>
-        </div>
+        <div class="form-group" style="flex:2;"><label>🐶 ワンちゃん名</label><input type="text" id="petName" required></div>
+        <div class="form-group" style="flex:1;"><label>性別</label><select id="gender"><option>男の子</option><option>女の子</option></select></div>
     </div>
 
     <div class="form-group">
-        <label>🎂 年齢 / ⚖️ 体重</label>
-        <div class="flex-group">
-            <input type="number" id="ageYear" placeholder="歳">
-            <input type="number" id="ageMonth" placeholder="ヶ月">
-            <input type="number" id="weight" step="0.1" placeholder="kg">
+        <label>🎂 年齢 / 誕生日</label>
+        <div>
+            <span id="btnBirth" class="toggle-btn active-toggle" onclick="showInput('birth')">誕生日から計算</span>
+            <span id="btnManual" class="toggle-btn" onclick="showInput('manual')">手動入力</span>
         </div>
+        <div id="birthInputArea"><input type="date" id="birthday" onchange="calculateAge()"><div id="ageResult" class="age-display">誕生日を選んでね</div></div>
+        <div id="manualInputArea" class="hidden"><div class="flex-group"><input type="number" id="manualAgeYear" placeholder="歳"><input type="number" id="manualAgeMonth" placeholder="ヶ月"></div></div>
     </div>
 
-    <div class="form-group">
-        <label for="hospital">🏥 かかりつけの動物病院</label>
-        <input type="text" id="hospital" placeholder="通っている病院名">
-    </div>
-
+    <div class="form-group"><label>⚖️ 体重</label><input type="number" id="weight" step="0.1" placeholder="kg"></div>
+    <div class="form-group"><label>🏥 かかりつけ病院</label><input type="text" id="hospital"></div>
+    
     <h3>🏥 医療・予防履歴</h3>
-    <div class="form-group">
-        <label>💉 最新のワクチン・予防接種</label>
-        <div class="flex-group">
-            <input type="date" id="lastVaccineDate">
-            <input type="text" id="lastVaccineType" placeholder="種類（5種、狂犬病など）">
-        </div>
-    </div>
-    <div class="form-group">
-        <label>🔙 過去のワクチン履歴・体調変化</label>
-        <textarea id="pastVaccineHistory" rows="3" placeholder="接種回数や、時期、その後の体調変化など。腸内環境の変化を追うため、なるべく詳しく教えてね。"></textarea>
-    </div>
-    <div class="form-group">
-        <label>💊 現在服用中のお薬・サプリ</label>
-        <textarea id="currentMed" rows="2" placeholder="今飲んでいるもの"></textarea>
-    </div>
-    <div class="form-group">
-        <label>🔙 過去に服用していたお薬</label>
-        <textarea id="pastMed" rows="2" placeholder="以前長く飲んでいたもの（抗生剤、ステロイド等）"></textarea>
-    </div>
+    <label>💉 最新ワクチン</label>
+    <div class="flex-group"><input type="date" id="lVDate"><input type="text" id="lVType" placeholder="種類"></div>
+    <label>🔙 過去の履歴</label>
+    <textarea id="pastVaccineHistory" rows="3" placeholder="詳しく教えてね"></textarea>
+    <label>💊 現在のお薬</label>
+    <textarea id="currentMed" rows="2"></textarea>
+    <label>🔙 過去のお薬</label>
+    <textarea id="pastMed" rows="2"></textarea>
 
     <h3>🍖 食事と暮らし</h3>
-    <div class="form-group">
-        <label>🥣 食事の内容</label>
-        <textarea id="foodInfo" rows="3" placeholder="フード名、手作り食の内容、おやつの種類や量"></textarea>
-    </div>
-    <div class="form-group">
-        <label>🏠 飼育環境</label>
-        <input type="text" id="environment" placeholder="例：1頭飼い・単身、多頭飼い、留守番時間など">
-    </div>
-
-    <div style="background-color: #fff3e0; padding: 15px; border-radius: 10px; margin: 25px 0; border: 1px dashed #ffb74d; text-align: center;">
-        <p style="font-size: 13px; margin: 0 0 10px 0; color: #e65100; font-weight: bold;">📊 血液検査などの結果がある方はこちら</p>
-        <button onclick="goToHealthCheck()" style="padding: 8px 20px; background-color: #ff9800; font-size: 14px; width: auto; margin-top: 0;">健康診断専用フォームへ</button>
-    </div>
+    <textarea id="foodInfo" rows="3" placeholder="ごはんの内容"></textarea>
+    <label>🏠 飼育環境</label>
+    <input type="text" id="environment">
 
     <h3>💬 ご相談</h3>
-    <div class="form-group">
+    <textarea id="concern" rows="4" placeholder="相談したいこと"></textarea>
+
+    <div class="form-group" style="margin-top: 20px;">
         <label>📸 写真アップロード</label>
         <input type="file" id="photo" accept="image/*" multiple>
         <p class="note">※ごはん、便、ワクチン証明書の写真など（送信後にトークでも送ってね！）</p>
     </div>
-    <div class="form-group">
-        <label for="concern">🐾 相談したいこと・不安なこと</label>
-        <textarea id="concern" rows="4" placeholder="どんな小さなことでもCoCoに教えてね。"></textarea>
+
+    <div style="background-color: #fff3e0; padding: 15px; border-radius: 10px; margin-top: 25px; border: 1px dashed #ffb74d; text-align: center;">
+        <p style="font-size: 13px; font-weight: bold; color: #e65100;">📊 血液検査結果がある方はこちら</p>
+        <button onclick="window.location.href='health.html'" style="padding: 10px 25px; background-color: #ff9800; color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: bold; cursor: pointer; width: auto;">健康診断専用フォームへ</button>
     </div>
 
-    <button onclick="sendData()">CoCoに相談する</button>
+    <button class="send-btn" onclick="sendData()">CoCoに相談する</button>
 </div>
 
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script>
     document.getElementById('date').valueAsDate = new Date();
+    liff.init({ liffId: "2008861082-o5jaHAfN" });
 
-    liff.init({ liffId: "2008861082-o5jaHAfN" }).catch(err => console.error(err));
-
-    // ここも health.html に飛ぶように書き換えたよ！
-    function goToHealthCheck() {
-        window.location.href = "health.html";
+    let ageMode = 'birth';
+    function showInput(mode) {
+        ageMode = mode;
+        document.getElementById('birthInputArea').classList.toggle('hidden', mode !== 'birth');
+        document.getElementById('manualInputArea').classList.toggle('hidden', mode !== 'manual');
+        document.getElementById('btnBirth').classList.toggle('active-toggle', mode === 'birth');
+        document.getElementById('btnManual').classList.toggle('active-toggle', mode === 'manual');
     }
-
+    function calculateAge() {
+        const b = new Date(document.getElementById('birthday').value);
+        const t = new Date();
+        if (isNaN(b)) return;
+        let y = t.getFullYear() - b.getFullYear();
+        let m = t.getMonth() - b.getMonth();
+        if (m < 0) { y--; m += 12; }
+        document.getElementById('ageResult').innerText = `現在：${y}歳 ${m}ヶ月`;
+    }
     function sendData() {
-        const d = document.getElementById('date').value;
         const owner = document.getElementById('ownerName').value;
         const name = document.getElementById('petName').value;
-        const gender = document.getElementById('gender').value;
-        const age = `${document.getElementById('ageYear').value || 0}歳${document.getElementById('ageMonth').value || 0}ヶ月`;
         const weight = document.getElementById('weight').value;
-        const hosp = document.getElementById('hospital').value;
-        const lVDate = document.getElementById('lastVaccineDate').value;
-        const lVType = document.getElementById('lastVaccineType').value;
-        const pVaccine = document.getElementById('pastVaccineHistory').value;
-        const currentMed = document.getElementById('currentMed').value;
-        const pastMed = document.getElementById('pastMed').value;
-        const food = document.getElementById('foodInfo').value;
-        const env = document.getElementById('environment').value;
-        const concern = document.getElementById('concern').value;
+        if (!owner || !name || !weight) { alert("「お名前」と「体重」は必ず入力してね！"); return; }
 
-        if (!owner || !name || !weight) {
-            alert("「お名前」と「体重」は必ず入力してね！");
-            return;
-        }
-
-        const message = `【CoCo相談カルテ ${d}】\n` +
-                        `飼い主: ${owner}様\n` +
-                        `ワンちゃん: ${name} (${gender})\n` +
-                        `年齢: ${age} / 体重: ${weight}kg\n` +
-                        `病院: ${hosp || '未記入'}\n\n` +
-                        `[最新ワクチン] ${lVDate || '不明'} (${lVType || '不明'})\n\n` +
-                        `[過去ワクチン履歴]\n${pVaccine || 'なし'}\n\n` +
-                        `[現在のお薬]\n${currentMed || 'なし'}\n\n` +
-                        `[過去のお薬]\n${pastMed || 'なし'}\n\n` +
-                        `[食事内容]\n${food || '未記入'}\n\n` +
-                        `[飼育環境]\n${env || '未記入'}\n\n` +
-                        `[相談内容]\n${concern}`;
-
-        liff.sendMessages([{ type: 'text', text: message }])
-            .then(() => {
-                alert("CoCoに相談を送ったよ！");
-                liff.closeWindow();
-            })
-            .catch(err => console.error(err));
+        let ageVal = (ageMode === 'birth') ? document.getElementById('ageResult').innerText : `${document.getElementById('manualAgeYear').value || 0}歳${document.getElementById('manualAgeMonth').value || 0}ヶ月`;
+        const msg = `【相談】名前: ${name}\n年齢: ${ageVal}\n内容: ${document.getElementById('concern').value}`;
+        liff.sendMessages([{ type: 'text', text: msg }]).then(() => { alert("送ったよ！"); liff.closeWindow(); });
     }
 </script>
 </body>
