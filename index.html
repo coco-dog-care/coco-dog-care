@@ -111,9 +111,9 @@
 <script>
     document.getElementById('date').valueAsDate = new Date();
 
-    // きょんこのIDをセットしたよ
     liff.init({ liffId: "2008861082-o5jaHAfN" }).catch(err => console.error(err));
 
+    // ここも health.html に飛ぶように書き換えたよ！
     function goToHealthCheck() {
         window.location.href = "health.html";
     }
@@ -155,13 +155,10 @@
 
         liff.sendMessages([{ type: 'text', text: message }])
             .then(() => {
-                alert("CoCoに相談を送ったよ！写真はLINEのトークでそのまま送ってね。");
+                alert("CoCoに相談を送ったよ！");
                 liff.closeWindow();
             })
-            .catch(err => {
-                console.error(err);
-                alert("送信に失敗しちゃった。LINEアプリの中で開いているか確認してね。");
-            });
+            .catch(err => console.error(err));
     }
 </script>
 </body>
