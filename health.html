@@ -6,141 +6,130 @@
     <title>CoCo 健康診断フォーム</title>
     <style>
         body { font-family: sans-serif; margin: 20px; background-color: #f0fff3; color: #3e2723; line-height: 1.6; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative; }
+        .top-nav { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .nav-btn { padding: 6px 12px; font-size: 11px; font-weight: bold; border-radius: 20px; cursor: pointer; text-decoration: none; border: 1px solid #4CAF50; }
+        .btn-chat { background-color: #f44336; color: white; border: none; }
+        .btn-home { background-color: #fff; color: #4CAF50; }
+        .btn-diary { background-color: #4CAF50; color: white; border: none; }
         h2 { text-align: center; color: #4CAF50; border-bottom: 2px solid #81C784; padding-bottom: 10px; margin-top: 0; }
-        h3 { font-size: 16px; color: #66BB6A; margin-top: 25px; border-left: 4px solid #81C784; padding-left: 10px; }
+        h3 { font-size: 16px; color: #66BB6A; margin-top: 25px; border-left: 4px solid #81C784; padding-left: 10px; background: #f9fff9; padding-top: 5px; padding-bottom: 5px; }
+        h4 { font-size: 14px; color: #388E3C; margin-bottom: 8px; margin-top: 15px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        input[type="text"], input[type="number"], input[type="date"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
-        .flex-group { display: flex; gap: 10px; margin-bottom: 10px; }
-        .flex-group > div { flex: 1; }
-        .flex-group label { width: 120px; flex-shrink: 0; line-height: 38px; }
+        input, textarea, select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+        .flex-group { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; }
+        .flex-group label { width: 140px; flex-shrink: 0; font-size: 13px; margin-bottom: 0; color: #555; }
         .flex-group input { flex: 1; }
-        button { width: 100%; padding: 15px; background-color: #66BB6A; color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
-        .note { font-size: 12px; color: #666; margin-top: 5px; text-align: center;}
-        .upload-section { background-color: #e8f5e9; border: 1px dashed #A5D6A7; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center;}
+        button#mainSendBtn { width: 100%; padding: 15px; background-color: #66BB6A; color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 0 #388E3C; }
+        .upload-section { background-color: #e8f5e9; border: 1px dashed #A5D6A7; padding: 15px; border-radius: 10px; margin-top: 25px; text-align: center;}
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>📊 CoCo 健康診断詳細カルテ</h2>
-    <p style="font-size: 13px; text-align: center; color: #4CAF50;">ワンちゃんの健康状態をCoCoと一緒に詳しく見ていこうね！</p>
-
-    <div class="form-group">
-        <label for="diagDate">📅 診断日</label>
-        <input type="date" id="diagDate">
-    </div>
-    
-    <div class="form-group">
-        <label for="petNameDiag">🐶 ワンちゃん名</label>
-        <input type="text" id="petNameDiag" placeholder="ワンちゃんのお名前" required>
+    <div class="top-nav">
+        <button class="nav-btn btn-chat" onclick="liff.closeWindow()">💬 CoCo先生に直相談</button>
+        <button class="nav-btn btn-home" onclick="location.href='index.html'">🏠 相談カルテ</button>
+        <button class="nav-btn btn-diary" onclick="location.href='diary.html'">📝 日記へ</button>
     </div>
 
-    <div class="form-group">
-        <label for="diagnosisName">🩺 診断された病名</label>
-        <input type="text" id="diagnosisName" placeholder="もし病名が診断されていたら教えてね（例：膵炎、腎不全など）">
-    </div>
+    <h2 id="healthTitle">📊 健康診断詳細カルテ</h2>
+    <p style="font-size: 13px; text-align: center; color: #4CAF50;">定期的な数値チェックで病気を予防しようね！</p>
 
-    <div class="upload-section">
-        <p style="font-size: 14px; margin-bottom: 10px; font-weight: bold; color: #388E3C;">📸 健康診断書や血液検査結果の写真をアップロード</p>
-        <input type="file" id="diagPhoto" accept="image/*" multiple>
-        <p class="note">※スマホで写メを撮ってアップロードするだけでOK！</p>
-    </div>
+    <form id="healthForm">
+        <div class="form-group">
+            <label>📅 診断日</label>
+            <input type="date" id="diagDate" name="date">
+        </div>
+        
+        <div class="form-group">
+            <label>🐶 ワンちゃん名</label>
+            <input type="text" name="petName" id="petNameDiag" placeholder="例: CoCo" required>
+        </div>
 
-    <h3>🩸 血液検査（生化学検査）</h3>
-    <p class="note">（お手元の検査結果の数値を入力してください）</p>
+        <div class="form-group">
+            <label>🩺 診断された病名</label>
+            <input type="text" name="diagnosisName" placeholder="（例：特に異常なし、膵炎、腎不全など）">
+        </div>
 
-    <h4>肝臓系</h4>
-    <div class="flex-group"><label>ALT (GPT)</label><input type="number" step="0.1" id="ALT" placeholder="U/L"></div>
-    <div class="flex-group"><label>ALP</label><input type="number" step="0.1" id="ALP" placeholder="U/L"></div>
-    <div class="flex-group"><label>AST (GOT)</label><input type="number" step="0.1" id="AST" placeholder="U/L"></div>
-    <div class="flex-group"><label>GGT</label><input type="number" step="0.1" id="GGT" placeholder="U/L"></div>
+        <h3>🩸 血液検査（生化学検査）</h3>
+        
+        <h4>肝臓系</h4>
+        <div class="flex-group"><label>ALT (GPT)</label><input type="number" step="0.1" name="ALT" placeholder="U/L"></div>
+        <div class="flex-group"><label>ALP</label><input type="number" step="0.1" name="ALP" placeholder="U/L"></div>
+        <div class="flex-group"><label>AST (GOT)</label><input type="number" step="0.1" name="AST" placeholder="U/L"></div>
 
-    <h4>腎臓系</h4>
-    <div class="flex-group"><label>BUN (尿素窒素)</label><input type="number" step="0.1" id="BUN" placeholder="mg/dL"></div>
-    <div class="flex-group"><label>CRE (クレアチニン)</label><input type="number" step="0.1" id="CRE" placeholder="mg/dL"></div>
-    <div class="flex-group"><label>SDMA</label><input type="number" step="0.1" id="SDMA" placeholder="µg/dL"></div>
+        <h4>腎臓系</h4>
+        <div class="flex-group"><label>BUN (尿素窒素)</label><input type="number" step="0.1" name="BUN" placeholder="mg/dL"></div>
+        <div class="flex-group"><label>CRE (クレアチニン)</label><input type="number" step="0.1" name="CRE" placeholder="mg/dL"></div>
+        <div class="flex-group"><label>SDMA</label><input type="number" step="0.1" name="SDMA" placeholder="µg/dL"></div>
 
-    <h4>タンパク質・代謝系</h4>
-    <div class="flex-group"><label>TP (総タンパク)</label><input type="number" step="0.1" id="TP" placeholder="g/dL"></div>
-    <div class="flex-group"><label>ALB (アルブミン)</label><input type="number" step="0.1" id="ALB" placeholder="g/dL"></div>
-    <div class="flex-group"><label>GLU (血糖値)</label><input type="number" step="0.1" id="GLU" placeholder="mg/dL"></div>
-    <div class="flex-group"><label>T-Cho (総コレステロール)</label><input type="number" step="0.1" id="T-Cho" placeholder="mg/dL"></div>
-    <div class="flex-group"><label>TG (中性脂肪)</label><input type="number" step="0.1" id="TG" placeholder="mg/dL"></div>
+        <h4>膵臓・炎症・その他</h4>
+        <div class="flex-group"><label>v-LIP (膵リパーゼ)</label><input type="text" name="vLIP" placeholder="数値または陽性/陰性"></div>
+        <div class="flex-group"><label>CRP (炎症反応)</label><input type="number" step="0.1" name="CRP" placeholder="mg/dL"></div>
+        <div class="flex-group"><label>GLU (血糖値)</label><input type="number" step="0.1" name="GLU" placeholder="mg/dL"></div>
+        <div class="flex-group"><label>T-Cho (コレステロール)</label><input type="number" step="0.1" name="TCHO" placeholder="mg/dL"></div>
 
-    <h4>膵臓・炎症系</h4>
-    <div class="flex-group"><label>v-LIP (膵リパーゼ)</label><input type="text" id="vLIP" placeholder="数値または陽性/陰性"></div>
-    <div class="flex-group"><label>CRP (炎症反応)</label><input type="number" step="0.1" id="CRP" placeholder="mg/dL"></div>
+        <h3>🔬 血球計算 (CBC)</h3>
+        <div class="flex-group"><label>WBC (白血球)</label><input type="number" step="0.1" name="WBC" placeholder="x10^3/µL"></div>
+        <div class="flex-group"><label>RBC (赤血球)</label><input type="number" step="0.1" name="RBC" placeholder="x10^6/µL"></div>
+        <div class="flex-group"><label>HCT (ヘマトクリット)</label><input type="number" step="0.1" name="HCT" placeholder="%"></div>
+        <div class="flex-group"><label>PLT (血小板)</label><input type="number" step="0.1" name="PLT" placeholder="x10^4/µL"></div>
 
-    <h3>🔬 血球計算 (CBC)</h3>
-    <div class="flex-group"><label>WBC (白血球)</label><input type="number" step="0.1" id="WBC" placeholder="x10^3/µL"></div>
-    <div class="flex-group"><label>RBC (赤血球)</label><input type="number" step="0.1" id="RBC" placeholder="x10^6/µL"></div>
-    <div class="flex-group"><label>HCT (ヘマトクリット)</label><input type="number" step="0.1" id="HCT" placeholder="%"></div>
-    <div class="flex-group"><label>HGB (ヘモグロビン)</label><input type="number" step="0.1" id="HGB" placeholder="g/dL"></div>
-    <div class="flex-group"><label>PLT (血小板)</label><input type="number" step="0.1" id="PLT" placeholder="x10^3/µL"></div>
+        <div class="form-group" style="margin-top: 30px;">
+            <label>💬 獣医さんからのコメント</label>
+            <textarea name="vetComments" rows="3" placeholder="先生からのアドバイスや、日頃の様子など"></textarea>
+        </div>
 
-    <div class="form-group" style="margin-top: 30px;">
-        <label for="vetComments">獣医さんからのコメント</label>
-        <textarea id="vetComments" rows="3" placeholder="先生から何かコメントがあれば入力してね"></textarea>
-    </div>
+        <div class="upload-section">
+            <p style="font-size: 14px; margin-bottom: 10px; font-weight: bold; color: #388E3C;">📸 検査結果の写真をアップ</p>
+            <input type="file" id="diagPhoto" accept="image/*" multiple>
+        </div>
 
-    <button onclick="sendHealthData()">CoCoに健康診断結果を送る</button>
+        <button type="submit" id="mainSendBtn">CoCoに健康診断結果を送る</button>
+    </form>
 </div>
 
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script>
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbyiCJEBqS-6DrnTsH9TopgEb6D1uM8dmbzr8p3iocwli17V7jRr4fHB-jewakTEG2Qf/exec';    
     document.getElementById('diagDate').valueAsDate = new Date();
-    
-    // 修正済み！きょんこのLIFF IDをセットしたよ
-    liff.init({ liffId: "2008861082-o5jaHAfN" }).catch(err => console.error(err));
+    liff.init({ liffId: "2008861082-o5jaHAfN" });
 
-    function sendHealthData() {
-        const diagDate = document.getElementById('diagDate').value;
-        const petName = document.getElementById('petNameDiag').value;
-        const diagnosisName = document.getElementById('diagnosisName').value;
+    document.getElementById('petNameDiag').addEventListener('input', function() {
+        const name = this.value;
+        document.getElementById('healthTitle').innerText = name ? `📊 ${name}の健康診断カルテ` : `📊 健康診断詳細カルテ`;
+    });
 
-        const ALT = document.getElementById('ALT').value;
-        const ALP = document.getElementById('ALP').value;
-        const AST = document.getElementById('AST').value;
-        const GGT = document.getElementById('GGT').value;
-        const BUN = document.getElementById('BUN').value;
-        const CRE = document.getElementById('CRE').value;
-        const SDMA = document.getElementById('SDMA').value;
-        const TP = document.getElementById('TP').value;
-        const ALB = document.getElementById('ALB').value;
-        const GLU = document.getElementById('GLU').value;
-        const TCho = document.getElementById('T-Cho').value;
-        const TG = document.getElementById('TG').value;
-        const vLIP = document.getElementById('vLIP').value;
-        const CRP = document.getElementById('CRP').value;
+    document.getElementById('healthForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('mainSendBtn');
+        btn.innerText = '送信中...';
+        btn.disabled = true;
 
-        const WBC = document.getElementById('WBC').value;
-        const RBC = document.getElementById('RBC').value;
-        const HCT = document.getElementById('HCT').value;
-        const HGB = document.getElementById('HGB').value;
-        const PLT = document.getElementById('PLT').value;
-        const vetComments = document.getElementById('vetComments').value;
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
 
-        if (!petName) { alert("ワンちゃんのお名前は必須だよ！"); return; }
+        fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
+        .then(() => {
+            let message = `【健康診断結果 ${data.date}】\nワンちゃん: ${data.petName}\n`;
+            message += `ALT: ${data.ALT || '-'} / ALP: ${data.ALP || '-'}\n`;
+            message += `BUN: ${data.BUN || '-'} / CRE: ${data.CRE || '-'}\n`;
+            message += `CRP: ${data.CRP || '-'} / v-LIP: ${data.vLIP || '-'}\n`;
+            message += `[コメント] ${data.vetComments || 'なし'}`;
 
-        let message = `【CoCo健康診断カルテ ${diagDate}】\nワンちゃん: ${petName}\n病名: ${diagnosisName || 'なし'}\n\n`;
-        message += `--- 血液検査（生化学）---\n`;
-        message += `ALT: ${ALT || '-'} U/L\nALP: ${ALP || '-'} U/L\nAST: ${AST || '-'} U/L\nGGT: ${GGT || '-'} U/L\n`;
-        message += `BUN: ${BUN || '-'} mg/dL\nCRE: ${CRE || '-'} mg/dL\nSDMA: ${SDMA || '-'} µg/dL\n`;
-        message += `TP: ${TP || '-'} g/dL\nALB: ${ALB || '-'} g/dL\nGLU: ${GLU || '-'} mg/dL\nT-Cho: ${TCho || '-'} mg/dL\nTG: ${TG || '-'} mg/dL\n`;
-        message += `v-LIP: ${vLIP || '-'}\nCRP: ${CRP || '-'} mg/dL\n\n`;
-        message += `--- 血球計算 (CBC)---\n`;
-        message += `WBC: ${WBC || '-'} x10^3/µL\nRBC: ${RBC || '-'} x10^6/µL\nHCT: ${HCT || '-'} %\nHGB: ${HGB || '-'} g/dL\nPLT: ${PLT || '-'} x10^3/µL\n\n`;
-        message += `[獣医さんコメント]\n${vetComments || 'なし'}`;
-
-        liff.sendMessages([{ type: 'text', text: message }])
-            .then(() => {
-                alert("健康診断の結果を送ったよ！");
-                liff.closeWindow();
-            })
-            .catch(err => console.error(err));
-    }
+            return liff.sendMessages([{ type: 'text', text: message }]);
+        })
+        .then(() => {
+            alert("保存して、CoCoに結果を送ったよ！");
+            liff.closeWindow();
+        })
+        .catch(err => {
+            alert("エラーが起きたよ");
+            btn.disabled = false;
+        });
+    });
 </script>
 </body>
 </html>

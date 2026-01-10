@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoCo 毎日日記</title>
+    <style>
+        body { font-family: sans-serif; padding: 10px; background-color: #fff9e6; color: #5d4037; }
+        .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; margin: auto; position: relative; }
+        
+        .top-nav { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .nav-btn { padding: 6px 12px; font-size: 11px; font-weight: bold; border-radius: 20px; cursor: pointer; text-decoration: none; border: 1px solid #ffa726; }
+        .btn-chat { background-color: #f44336; color: white; border: none; }
+        .btn-home { background-color: #fff; color: #ffa726; }
+        .btn-health { background-color: #66BB6A; color: white; border: none; }
+
+        .profile-area { background-color: #fff3e0; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 2px solid #ffcc80; }
+        .profile-title { font-size: 12px; color: #e65100; margin: 0; text-align: center; font-weight: bold; }
+        .profile-main { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; }
+        .pet-name-display { font-size: 24px; color: #f57c00; font-weight: bold; }
+        .profile-details { font-size: 13px; text-align: center; margin-top: 5px; color: #8d6e63; line-height: 1.4; }
+        
+        h2#diaryTitle { text-align: center; color: #e65100; font-size: 18px; margin-bottom: 10px; }
+
+        .section { margin-bottom: 18px; border-bottom: 1px solid #ffe0b2; padding-bottom: 10px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #e65100; font-size: 14px; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ffcc80; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        
+        .upload-section { background-color: #fff8e1; border: 2px dashed #ffcc80; padding: 15px; border-radius: 10px; margin-top: 10px; margin-bottom: 18px; text-align: center; }
+        .upload-text { font-size: 14px; margin-bottom: 8px; font-weight: bold; color: #e65100; }
+
+        .radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+        .radio-group label { background: #fff; border: 1px solid #ffcc80; padding: 8px 12px; border-radius: 20px; font-weight: normal; cursor: pointer; font-size: 13px; flex: 1; text-align: center; min-width: 70px; }
+        .radio-group input { display: none; }
+        .radio-group input:checked + label { background: #ffa726; color: white; border-color: #ffa726; }
+        
+        .submit-btn { width: 100%; padding: 15px; background-color: #ffa726; color: white; border: none; border-radius: 30px; font-size: 18px; font-weight: bold; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 0 #e67e22; }
+        .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #e67e22; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="top-nav">
+        <button class="nav-btn btn-chat" onclick="liff.closeWindow()">💬 CoCo先生に直相談</button>
+        <button class="nav-btn btn-home" onclick="location.href='index.html'">🐾 プロフィール</button>
+        <button class="nav-btn btn-health" onclick="location.href='health.html'">🏥 健康診断</button>
+    </div>
+
+    <h2 id="diaryTitle">🐾 CoCo 毎日日記</h2>
+
+    <div class="profile-area">
+        <p class="profile-title">✨ 現在の記録対象 ✨</p>
+        <div class="profile-main">
+            <span class="pet-name-display" id="displayPetName">CoCo</span>
+        </div>
+        <div class="profile-details" id="displayProfile"></div>
+    </div>
+
+    <form id="diaryForm">
+        <div class="section">
+            <label>🐶 ペットを選択</label>
+            <select name="petName" id="petSelect" onchange="updateProfile()">
+                <option value="CoCo">CoCo</option>
+                <option value="サブちゃん">サブちゃん</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <label>📅 日付</label>
+            <input type="date" id="date" name="date">
+        </div>
+
+        <div class="section">
+            <label>⚖️ 体重 (kg)</label>
+            <input type="number" step="0.01" name="weight" placeholder="例: 4.55">
+        </div>
+
+        <div class="section">
+            <label>💩 便の状態</label>
+            <div class="radio-group">
+                <input type="radio" id="unco1" name="poop" value="普通" checked><label for="unco1">普通</label>
+                <input type="radio" id="unco2" name="poop" value="柔らかめ"><label for="unco2">柔らかめ</label>
+                <input type="radio" id="unco3" name="poop" value="硬め"><label for="unco3">硬め</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <label>🍚 食事の完食度</label>
+            <div class="radio-group">
+                <input type="radio" id="eat1" name="mealAmount" value="完食" checked><label for="eat1">完食</label>
+                <input type="radio" id="eat2" name="mealAmount" value="半分"><label for="eat2">半分</label>
+                <input type="radio" id="eat3" name="mealAmount" value="食べない"><label for="eat3">食べない</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <label>🍖 食事の詳細（回数・内容・量など）</label>
+            <textarea name="mealDetail" rows="2" placeholder="例：朝夕2回。カリカリ20gとささみトッピングを完食！"></textarea>
+        </div>
+
+        <div class="section">
+            <label>🏃 元気・様子</label>
+            <div class="radio-group">
+                <input type="radio" id="genki1" name="condition" value="元気！" checked><label for="genki1">元気！</label>
+                <input type="radio" id="genki2" name="condition" value="普通"><label for="genki2">普通</label>
+                <input type="radio" id="genki3" name="condition" value="少し元気ない"><label for="genki3">少し元気ない</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <label>💊 今日のお薬</label>
+            <input type="text" name="medicine" placeholder="飲ませたお薬があれば入力">
+        </div>
+
+        <div class="section">
+            <label>💉 ワクチン・予防接種</label>
+            <input type="text" name="vaccine" placeholder="接種した内容（狂犬病など）">
+        </div>
+
+        <div class="section">
+            <label>📝 備考・一言メモ</label>
+            <textarea name="concern" rows="3" placeholder="今日の可愛い様子など"></textarea>
+        </div>
+
+        <div class="upload-section">
+            <p class="upload-text">📸 今日のベストショットをアップ！</p>
+            <input type="file" id="petPhoto" name="petPhoto" accept="image/*" multiple>
+        </div>
+
+        <input type="hidden" name="ownerName" value="きょんこ">
+        <button type="submit" class="submit-btn" id="submitBtn">スプレッドシートに保存！</button>
+    </form>
+</div>
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+    const petData = {
+        "CoCo": { breed: "トイプードル", age: "5歳", fixed: "避妊済み" },
+        "サブちゃん": { breed: "チワワ", age: "2歳", fixed: "未避妊" }
+    };
+
+    function updateProfile() {
+        const selected = document.getElementById('petSelect').value;
+        const profile = petData[selected];
+        document.getElementById('displayPetName').innerText = selected;
+        document.getElementById('displayProfile').innerHTML = 
+            `🐶 犬種: ${profile.breed} / 🎂 年齢: ${profile.age}<br>✨ 避妊情報: ${profile.fixed}`;
+        document.getElementById('diaryTitle').innerText = `🐾 ${selected} 毎日日記`;
+    }
+
+    liff.init({ liffId: "2008861082-o5jaHAfN" });
+    updateProfile();
+
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbyiCJEBqS-6DrnTsH9TopgEb6D1uM8dmbzr8p3iocwli17V7jRr4fHB-jewakTEG2Qf/exec';    document.getElementById('date').valueAsDate = new Date();
+
+    document.getElementById('diaryForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = '送信中...';
+        btn.disabled = true;
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            alert('スプレッドシートに日記を保存したよ！');
+            btn.innerText = 'スプレッドシートに保存！';
+            btn.disabled = false;
+            this.reset();
+            document.getElementById('date').valueAsDate = new Date();
+            updateProfile();
+        })
+        .catch(error => {
+            alert('エラー！');
+            btn.disabled = false;
+        });
+    });
+</script>
+
+</body>
+</html>
